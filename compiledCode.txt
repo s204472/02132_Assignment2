@@ -1,0 +1,112 @@
+
+//SETTING CONSTANTS
+LI R28 255
+LI R29 20
+LI R30 0
+LI R31 19
+
+
+// OUTER LOOP FOR LOOP 1
+    1. LI R0 0;                    // SÆTTER R0 til 0
+    2h. SUB R1 R31 R0                // R1 = R31 - R0
+    3. JLT "jump a" R1 R30                // HVIS FORRIGE ER NEGATIV JUMP TIL 9.
+
+
+    // INNER LOOP For LOOP 2
+        4. LI R2 0                     // SÆTTER R2 til 0
+        5g. SUB R3 R31 R2                // R3 = R31 - R2
+        6. JLT "jump b" R3 R30                // HVIS FORRIGE ER NEGATIV JUMP TIL 9.
+
+
+        // 4 IFS DER GØR DET SAMME
+            7. JEQ "jump c" R0 R30
+            8. JEQ "jump c" R0 R31 
+            9. JEQ "jump c" R2 R30
+            10. JEQ "jump c" R2 R31
+        // 4 IFS SLUT
+        11. JR "jump e"             // JUmp over set pixel sort funktion.
+
+        // SET PIXEL SORT OG CONTINUE
+            "Jump til efter funktion sæt pixel sort"
+            // ADRESSE FORMEL: 400 + 20 * x + y
+            12c. ADDI R5 R2 400
+            13. MULT R6 R0 R29   
+            14. ADD R7 R6 R5
+            15. SD R30 R7
+            16. JR "jump d"
+        // SLUT PÅ SÆT PIXEL SORT
+
+
+        // If STATEMENT (linje 9) OM PIXEL ER SORT
+        //compute 20*x+y LOAD ADRESSE 
+        
+            17e. MULT R6 R0 R29
+            18. ADD R7 R6 R2
+            19. LD R8 R7     // HENT DATA
+            20. JLT "jump f" R8 R30 
+            21. JLT "jump f" R30 R8
+            22. JR "jump c"
+
+        
+
+        // IF SLUT
+        // ELSE BEGYND
+            // INDRE IF BEGYND
+            // FØRSTE IF
+            23f. ADDI R8 R7 1 
+            24. LD R9 R8
+            25. JEQ "jump c" R9 R30
+            // FØRSTE IF SLUT
+            // ANDEN IF
+            23. ADDI R8 R7 -1 
+            24. LD R9 R8
+            25. JEQ "jump c" R9 R30
+            // ANDEN IF SLUT
+            // TREDJE IF
+            23. ADDI R8 R7 20
+            24. LD R9 R8
+            25. JEQ "jump c" R9 R30
+            // TREDJE IF SLUT
+            // FJERDE IF
+            23. ADDI R8 R7 -20 
+            24. LD R9 R8
+            25. JEQ "jump c" R9 R30
+            // FJERDE IF SLUT
+            
+            
+            
+            // INDRE ELSE BEGYND
+                26. ADDI R5 R2 400
+                27. MULT R6 R0 R29   
+                28. ADD R7 R6 R5
+                29. SD R28 R7
+
+
+            // INDRE ELSE SLUT
+        // ELSE SLUT
+
+
+
+        31d.
+        32. ADDI R2 R2 1                    // R2 + 1
+        33. JR "jump g"                          // JUMP TIL (start af inner loop)
+        34b.
+    // FOR LOOP 2 SLUT.
+
+
+
+    35. ADDI R0 R0 1
+    36. JR "h"                               // JUMP TIL (start af outer loop)
+    37a. 
+// FOR LOOP 1 SLUT.
+
+
+
+
+
+
+
+
+
+
+
