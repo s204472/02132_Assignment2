@@ -10,8 +10,8 @@ module ProgramCounter(
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
-  reg [15:0] countReg; // @[ProgramCounter.scala 13:25]
-  wire [15:0] adderOutput = countReg + 16'h1; // @[ProgramCounter.scala 14:30]
+  reg [15:0] countReg; // @[ProgramCounter.scala 14:25]
+  wire [15:0] adderOutput = countReg + 16'h1; // @[ProgramCounter.scala 15:30]
   wire  _T_1 = ~io_run; // @[ProgramCounter.scala 16:29]
   wire  stopped = io_stop | _T_1; // @[ProgramCounter.scala 16:25]
   assign io_programCounter = countReg; // @[ProgramCounter.scala 20:21]
