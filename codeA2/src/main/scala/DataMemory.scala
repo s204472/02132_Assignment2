@@ -3,7 +3,7 @@ import chisel3._
 class DataMemory extends Module {
   val io = IO(new Bundle {
     val address = Input(UInt (16.W))
-    val dataRead = Output(UInt (32.W))
+    val dataRead = Output(SInt (32.W))
     val writeEnable = Input(Bool ())
     val dataWrite = Input(UInt (32.W))
 
