@@ -28,15 +28,64 @@ class CPUTop extends Module {
   val alu = Module(new ALU())
 
   //Connecting the modules
-  //programCounter.io.run := io.run
-  //programMemory.io.address := programCounter.io.programCounter
+  programCounter.io.run := io.run
 
-  
+  // Read instruction
+  programMemory.io.address := programCounter.io.programCounter
+  val instruction = programMemory.io.instructionRead
 
-  ////////////////////////////////////////////
-  //Continue here with your connections
-  ////////////////////////////////////////////
+  // Split opcode to controlbits
+  controlUnit.io.opcode := instruction(31, 25)
 
+  // Send adresses into registers
+  registerFile.io.writeEnable := controlUnit.io.output5 | controlUnit.io.output4
+
+  registerFile.io.writeSel := instruction(25, 21)
+  registerFile.io.aSel := instruction(20, 16)
+  registerFile.io.bSel := instruction(15, 11)
+  registerFile.io.writeData := writeData
+
+
+  // Sign extend data
+  val data = instruction(15, 0)
+  val dataSignExtend = data.S(32.W)
+
+
+
+  // ALU
+  alu.io.sel := instruction(31, 25)
+  alu.io.oper1 := registerFile.io.a
+  when(instruction(31, 25) === "b010000".U || instruction(31, 25) === "b010000".U) {
+    alu.io.oper2 := dataSignExtend
+  } .otherwise {
+    alu.io.oper2 := registerFile.io.b
+  }
+
+  // Data memory
+  dataMemory.io.address := alu.io.result
+  dataMemory.io.dataWrite := registerFile.io.b
+  when (instruction(31, 25) === "b001001".U){
+    dataMemory.io.writeEnable := true
+  } .otherwise {
+    dataMemory.io.writeEnable := false
+  }
+
+  // Last mux
+  val writeData := SInt(32.W)
+  when (instruction(31, 25) === "b001001".U){
+    writeData = dataMemory.io.dataRead
+  } .otherwise {
+    writeData = alu.io.result
+  }
+
+
+
+
+
+
+  // Jump handling
+  programCounter.io.jump := controlUnit.io.output2
+  programCounter.io.programCounterJump := data
 
 
 
