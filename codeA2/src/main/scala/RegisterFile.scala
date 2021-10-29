@@ -6,17 +6,17 @@ class RegisterFile extends Module {
     //Define the module interface here (inputs/outputs)
     val aSel = Input(UInt (5.W))
     val bSel = Input(UInt (5.W))
-    val writeData = Input(SInt (32.W))
+    val writeData = Input(UInt (32.W))
     val writeSel = Input(UInt (5.W))
     val writeEnable = Input(Bool())
-    val a = Output(SInt (32.W))
-    val b = Output(SInt (32.W))
+    val a = Output(UInt (32.W))
+    val b = Output(UInt (32.W))
   })
 
-  val registerFile = Reg(Vec(32, SInt(32.W)))
+  val registerFile = Reg(Vec(32, UInt(32.W)))
 
 
-  when (io.writeEnable){
+  when (io.writeEnable) {
     registerFile(io.writeSel) := io.writeData
   }
   io.a := registerFile(io.aSel)

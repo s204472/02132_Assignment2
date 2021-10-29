@@ -5,12 +5,13 @@ class ALU extends Module {
   val io = IO(new Bundle {
     //Define the module interface here (inputs/outputs)
     val sel = Input(UInt(6.W))
-    val oper1 = Input(SInt(32.W))
-    val oper2 = Input(SInt(32.W))
+    val oper1 = Input(UInt(32.W))
+    val oper2 = Input(UInt(32.W))
     val comparisonResult = Output(Bool())
-    val result = Output(SInt(32.W))
+    val result = Output(UInt(32.W))
   })
-  io.result := 0.S(32.W)
+  //io.result := 0.S(32.W)
+  io.result := 0.U(32.W)
   io.comparisonResult := 0.U
 
   //0001 = add, 0010 = sub,
