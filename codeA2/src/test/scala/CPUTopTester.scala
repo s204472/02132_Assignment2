@@ -12,8 +12,8 @@ class CPUTopTester(dut: CPUTop) extends PeekPokeTester(dut) {
   System.out.print("\nLoading the data memory with image data... ")
   //Uncomment one of the following line depending on the image you want to load to the data memory
   //var image = Images.blackImage
-  //var image = Images.whiteImage
-  var image = Images.cellsImage
+  var image = Images.whiteImage
+  //var image = Images.cellsImage
   //var image = Images.borderCellsImage
   for( address <- 0 to image.length-1){
     poke(dut.io.testerDataMemEnable, 1)
@@ -28,8 +28,8 @@ class CPUTopTester(dut: CPUTop) extends PeekPokeTester(dut) {
   //Load the program memory with instructions
   System.out.print("\nLoading the program memory with instructions... ")
   //Uncomment one of the following line depending on the program you want to load to the program memory
-  val program = Programs.program1
-  //val program = Programs.program2
+  //val program = Programs.program1
+  val program = Programs.constOuterInnerTEST
   for( address <- 0 to program.length-1){
     poke(dut.io.testerProgMemEnable, 1)
     poke(dut.io.testerProgMemWriteEnable, 1)
@@ -45,7 +45,7 @@ class CPUTopTester(dut: CPUTop) extends PeekPokeTester(dut) {
   //Start the CPU
   poke(dut.io.run, 1)
   var running = true
-  var maxInstructions = 20000
+  var maxInstructions = 15000
   var instructionsCounter = maxInstructions
   while(running) {
     System.out.print("\rRunning cycle: " + (maxInstructions - instructionsCounter))

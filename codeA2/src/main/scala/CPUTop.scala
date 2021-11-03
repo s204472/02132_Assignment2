@@ -42,7 +42,7 @@ class CPUTop extends Module {
   registerFile.io.writeEnable := controlUnit.io.output5 | controlUnit.io.output4 | controlUnit.io.output3
 
   registerFile.io.writeSel := instruction(25, 21)
-  when(controlUnit.io.output2){
+  when(controlUnit.io.output2 || instruction(31, 26) === "b001001".U){
     registerFile.io.aSel := instruction(25, 21)
     registerFile.io.bSel := instruction(20, 16)
   } .otherwise {
@@ -66,17 +66,23 @@ class CPUTop extends Module {
   }
 
   // Data memory
-  dataMemory.io.address := alu.io.result
-  dataMemory.io.dataWrite := registerFile.io.a
+  dataMemory.io.address := registerFile.io.b
+  dataMemory.io.dataWrite := alu.io.result
   when (instruction(31, 26) === "b001001".U){
     dataMemory.io.writeEnable := true.B
+    registerFile.io.writeEnable := false.B
   } .otherwise {
     dataMemory.io.writeEnable := false.B
+
   }
 
-  // Last mux
 
-  when (instruction(31, 26) === "b001001".U) {
+  // Last mux
+  when (instruction(31, 26) === "b001010".U){
+    registerFile.io.writeEnable := true.B
+    dataMemory.io.address := registerFile.io.a
+  }
+  when (instruction(31, 26) === "b001001".U || instruction(31, 26) === "b001010".U) {
     registerFile.io.writeData := dataMemory.io.dataRead
   } .otherwise {
     registerFile.io.writeData := alu.io.result

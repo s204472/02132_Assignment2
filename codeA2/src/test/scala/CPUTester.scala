@@ -28,7 +28,7 @@ class CPUTester(dut: CPUTop) extends PeekPokeTester(dut) {
   //Load the program memory with instructions
   System.out.print("\nLoading the program memory with instructions... ")
   //Uncomment one of the following line depending on the program you want to load to the program memory
-  val program = Programs.constAndOuterForLoop
+  val program = Programs.constOuterInnerTEST
   //val program = Programs.program2
   for( address <- 0 to program.length-1){
     poke(dut.io.testerProgMemEnable, 1)
@@ -47,7 +47,7 @@ class CPUTester(dut: CPUTop) extends PeekPokeTester(dut) {
   poke(dut.io.run, 1)
 
   var running = true
-  var maxInstructions = 10000
+  var maxInstructions = 3000
   var instructionsCounter = maxInstructions
   while(running) {
     System.out.print("\rRunning cycle: " + (maxInstructions - instructionsCounter))
